@@ -62,12 +62,11 @@
             if (board[coordBoard[1]][coordBoard[0]] == -100) {//if no one plays here yet. Remember to swap the position of x y whe applying to the board's arr
                 drawHuman(ctx, coordCanvas[0], coordCanvas[1]); //display human's move
                 board[coordBoard[1]][coordBoard[0]] = 1; //update board with human's move for AI to compute
-                if (isWon(board)==1)
-                {//human wins
+                if (isWon(board) == 1) {//human wins
                     alert('Human wins. Click ok to reload.');
                     window.location.reload(true);
                 }
-                if (isWon(board)==2){//reach 9 moves and not win, drawn is declared 
+                if (isWon(board) == 2) {//reach 9 moves and not win, drawn is declared 
                     alert('Drawn. Click ok to reload');
                     window.location.reload(true);
                 }
@@ -75,10 +74,10 @@
                 aiMove = moveAI(board);//find the best move for AI
                 board[aiMove[0]][aiMove[1]] = 0;//update board with AI's move
                 drawAI(ctx, aiMove[1], aiMove[0]); //function drawAI use board Coord to draw instead of page location
-                
+                console.log("Board after AI move: " + board);
                 //check status. AI has just played so there are two cases: either AI wins or nothing happens.Human cannot win here
                 if (isWon(board) == -1) {
-                    alert('Nice try but you lost.\n Click ok to reload this page');
+                    alert('Nice try but you lost.\nClick ok to reload this page');
                     window.location.reload(true);
                 }
             }
@@ -177,17 +176,7 @@
     }
 
     function isWon(board) {//human 1, ai 0 on the board. return 1 if human wins, -1 if ai wins, 0 if nothing yet, 2 if drawn. In case of a drawn game, check if count = 9 
-        if (areAllEqual(board[0][0], board[1][1], board[2][2], 1) ||//diagonal \
-            areAllEqual(board[0][2], board[1][1], board[2][0], 1) ||//diagonal /
-            areAllEqual(board[0][0], board[1][0], board[2][0], 1) ||
-            areAllEqual(board[0][1], board[1][1], board[2][1], 1) ||
-            areAllEqual(board[0][2], board[1][2], board[2][2], 1) ||//vertical 
-            areAllEqual(board[0][0], board[0][1], board[0][2], 1) ||
-            areAllEqual(board[1][0], board[1][1], board[1][2], 1) ||
-            areAllEqual(board[2][0], board[2][1], board[2][2], 1)//horizontal
-        ) {
-            return 1;
-        }
+
         if (areAllEqual(board[0][0], board[1][1], board[2][2], 0) ||//diagonal \
             areAllEqual(board[0][2], board[1][1], board[2][0], 0) ||//diagonal /
             areAllEqual(board[0][0], board[1][0], board[2][0], 0) ||
@@ -195,9 +184,20 @@
             areAllEqual(board[0][2], board[1][2], board[2][2], 0) ||//vertical 
             areAllEqual(board[0][0], board[0][1], board[0][2], 0) ||
             areAllEqual(board[1][0], board[1][1], board[1][2], 0) ||
-            areAllEqual(board[2][0], board[2][1], board[2][2], 0)//horizontal
-        ) {
+            areAllEqual(board[2][0], board[2][1], board[2][2], 0))//horizontal
+        {
             return -1;
+        } 
+        if (areAllEqual(board[0][0], board[1][1], board[2][2], 1) ||//diagonal \
+            areAllEqual(board[0][2], board[1][1], board[2][0], 1) ||//diagonal /
+            areAllEqual(board[0][0], board[1][0], board[2][0], 1) ||
+            areAllEqual(board[0][1], board[1][1], board[2][1], 1) ||
+            areAllEqual(board[0][2], board[1][2], board[2][2], 1) ||//vertical 
+            areAllEqual(board[0][0], board[0][1], board[0][2], 1) ||
+            areAllEqual(board[1][0], board[1][1], board[1][2], 1) ||
+            areAllEqual(board[2][0], board[2][1], board[2][2], 1))//horizontal
+        {
+            return 1;
         }
         let count = 0;
         board.forEach(subarr => {
@@ -212,7 +212,7 @@
     }
 
     function areAllEqual(x, y, z, val) {//check if x==y==z!=null
-        if (x == y && y == z && x == 1)
+        if (x == y && y == z && x == val)
             return true;
         return false;
     }
